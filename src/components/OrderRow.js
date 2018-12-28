@@ -1,24 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Button } from 'semantic-ui-react';
+import { Button, List, Icon, Container } from 'semantic-ui-react';
+import OrderLineTable from './OrderLineTable';
+import {OrderShape} from './PropTypes';
 
+class OrderRow extends React.Component {
+    constructor() {
+        super()
 
-const OrderRow = ({order, handlePredict, isPredicting}) => (
-    <Table.Row>
-        <Table.Cell value={order.orderLineId}>{order.orderLineId}</Table.Cell>
-        <Table.Cell value={order.paymentType}>{order.paymentType}</Table.Cell>
-        <Table.Cell value={order.productId}>{order.productId}</Table.Cell>
-        <Table.Cell value={order.cardValue}>{order.cardValue}</Table.Cell>
-        <Table.Cell value={order}>
-            {handlePredict? isPredicting? <Button primary loading>Predict</Button>: <Button primary onClick={(order)=>handlePredict(order)}>Predict</Button> : order.state}
-        </Table.Cell>
-    </Table.Row>
-);
+        this.state = {
+            showOrderLines: false
+        }
+    }
 
+    handleExpandClick(e) {
+        this.setState({showOrderLines: !this.state.showOrderLines})
+    }
+
+    render() {
+        return (
+            <List.Item>
+                <List.Content floated='right'>
+                    {this.props.handlePredict? (this.props.isPredicting ? <Button loading>Predicting</Button> : <Button onClick={(e, order) => {this.props.handlePredict(order.orderId)}}>Predict</Button>) : null}
+                </List.Content>
+                <List.Content>
+                    <Container textAlign="left">
+                    <List.Header onClick={this.handleExpandClick.bind(this)}>
+                        {this.state.showOrderLines? <Icon name='angle down'/> : <Icon name='angle right'/>}
+                        Order ID: {this.props.order.orderId}
+                    </List.Header>
+                    </Container>
+                </List.Content>
+                    {this.state.showOrderLines ? <OrderLineTable 
+                    orderLines={this.props.order.orderLines}
+                    handlePredict={this.props.handlePredict}/> : null}
+            </List.Item>
+        );
+    }
+}
+
+    
 OrderRow.propTypes = {
-    order: PropTypes.object,
-    handlePredict: PropTypes.func,
-    isPredicting: PropTypes.bool
-};
-  
+    order: PropTypes.shape(OrderShape),
+    isPredicting: PropTypes.bool,
+    handlePredict: PropTypes.func
+}
+
 export default OrderRow;

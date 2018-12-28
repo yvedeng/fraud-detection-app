@@ -1,16 +1,18 @@
 import React from 'react';
 import { Segment, Dimmer} from 'semantic-ui-react';
 import Overview from './components/Overview';
+import { orders, initialOrders} from './components/fakeData';
 
 class FraudApp extends React.Component{
     constructor() {
         super()
         this.state = {
             accounts: [],
-            orders: [],
-            newOrders: [],
+            orders: initialOrders,
+            newOrders: initialOrders,
             isSearching: false,
-            isPredicting: false
+            isPredicting: false,
+            numberOrderPerPage: 1
         }
     }
 
@@ -34,6 +36,7 @@ class FraudApp extends React.Component{
         return order;
     }
 
+    // Needs to fix
     handlePredict(order){
         console.log(order)
         console.log(this.state.newOrders);
@@ -52,7 +55,7 @@ class FraudApp extends React.Component{
         })
     }
     
-    handleSubmit(accountId) {
+    handleSearch(accountId) {
         this.setState({isSearching: true});
         console.log(accountId);
         if (accountId === 0){
@@ -61,31 +64,8 @@ class FraudApp extends React.Component{
         }
         setTimeout(function (){
             // Something you want delayed.
-            this.setState({orders: [
-                {
-                    orderLineId: 1,
-                    paymentType: 2,
-                    productId: 3,
-                    cardValue: 4,
-                    state: 1
-                },
-                {
-                    orderLineId: 2,
-                    paymentType: 3,
-                    productId: 4,
-                    cardValue: 5,
-                    state: 0
-                }
-            ]});
-    
-            this.setState({newOrders: [{
-                orderLineId: 3,
-                paymentType: 4,
-                productId: 5,
-                cardValue: 6,
-                state: 0
-            }]});
-
+            this.setState({orders: orders});
+            this.setState({newOrders: orders});
             this.setState({isSearching: false});
 
           }.bind(this), 1000);
@@ -101,8 +81,10 @@ class FraudApp extends React.Component{
                 orders={this.state.orders}
                 newOrders={this.state.newOrders}
                 isSearching={this.state.isSearching}
-                onSubmit={this.handleSubmit.bind(this)} 
-                handlePredict={this.handlePredict.bind(this)}/>
+                isPredicting={this.state.isPredicting}
+                onSubmit={this.handleSearch.bind(this)} 
+                handlePredict={this.handlePredict.bind(this)}
+                numberOrderPerPage={this.state.numberOrderPerPage}/>
             </Dimmer.Dimmable>
             </div>
         )

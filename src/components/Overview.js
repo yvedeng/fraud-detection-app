@@ -4,7 +4,7 @@ import OrderList from './OrderList';
 import AccountForm from './AccountForm';
 import Visualization from './Visualization';
 
-const Overview = ({accounts, orders, newOrders, isSearching, onSubmit, handlePredict}) => (
+const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSubmit, handlePredict, numberOrderPerPage}) => (
     <div>
         <Header as='h1' textAlign="center" block={true} dividing={true} icon>
             <Icon name="user secret" circular={true} />
@@ -34,8 +34,9 @@ const Overview = ({accounts, orders, newOrders, isSearching, onSubmit, handlePre
             </Header>
             </Divider>
 
-            <OrderList orders={orders} />
-
+            <OrderList 
+                orders={orders}
+                numberOrderPerPage={numberOrderPerPage} />
             <br></br>
 
             <Divider horizontal>
@@ -45,8 +46,11 @@ const Overview = ({accounts, orders, newOrders, isSearching, onSubmit, handlePre
             </Header>
             </Divider>
 
-            <OrderList orders={newOrders} handlePredict={handlePredict}/>
-
+            <OrderList 
+                orders={newOrders}
+                isPredicting={isPredicting}
+                handlePredict={handlePredict}
+                numberOrderPerPage={numberOrderPerPage} />
             <br></br>
 
             <Divider horizontal>

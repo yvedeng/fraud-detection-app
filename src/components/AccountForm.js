@@ -38,7 +38,7 @@ class AccountForm extends React.Component{
                 </Form.Input>
                 <Form.Button 
                     content={this.props.isSearching? 'Searching':'Search'}
-                    disabled={this.props.isSearching}>
+                    loading={this.props.isSearching}>
                 </Form.Button>
       
                 </Form.Group>
