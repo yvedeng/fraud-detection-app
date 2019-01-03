@@ -38,16 +38,21 @@ export default class OrderList extends React.Component {
             <div>
                 <Accordion fluid styled>
                 {   this.state.ordersByPage.length > 0 ?
+                    // if multiple pages 
                     this.state.ordersByPage[this.state.activePage-1].map((order, i)=>{
                         return (
                             <List key={i} divided verticalAlign='middle'>
+                            <List.Content floated='right'>
+                                Total: {this.props.orders.length} Orders
+                            </List.Content>
                             <OrderRow 
                                 key={i}
                                 order={order}
                                 isPredicting={this.props.isPredicting}
-                                handlePredict={this.props.handlePredict}></OrderRow>
+                                handlePredict={this.props.handlePredict}
+                                handleCancel={this.props.handleCancel}></OrderRow>
                             </List>)})
-                    :
+                    : // if single page
                     this.props.orders.map((order, i)=>{
                         return (
                             <List key={i} divided verticalAlign='middle'>
@@ -55,7 +60,8 @@ export default class OrderList extends React.Component {
                                 key={i}
                                 order={order}
                                 isPredicting={this.props.isPredicting}
-                                handlePredict={this.props.handlePredict}></OrderRow>
+                                handlePredict={this.props.handlePredict}
+                                handleCancel={this.props.handleCancel}></OrderRow>
                             </List>)})
                     }
                  
@@ -81,5 +87,6 @@ OrderList.propTypes = {
     orders: PropTypes.arrayOf(PropTypes.shape(OrderShape)),
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
-    numberOrderPerPage: PropTypes.number.isRequired
+    numberOrderPerPage: PropTypes.number.isRequired,
+    handleCancel: PropTypes.func
 };

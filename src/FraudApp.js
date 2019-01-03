@@ -1,7 +1,8 @@
 import React from 'react';
 import { Segment, Dimmer} from 'semantic-ui-react';
-import Overview from './components/Overview';
-import { orders, initialOrders} from './components/fakeData';
+import iziToast from 'izitoast';
+import B2bDetection from './components/B2bDetection';
+import { orders, initialOrders} from './api/fakeData';
 
 class FraudApp extends React.Component{
     constructor() {
@@ -12,7 +13,8 @@ class FraudApp extends React.Component{
             newOrders: initialOrders,
             isSearching: false,
             isPredicting: false,
-            numberOrderPerPage: 1
+            numberOrderPerPage: 1,
+            predictedOrders: []
         }
     }
 
@@ -30,30 +32,7 @@ class FraudApp extends React.Component{
         })
     }
 
-    _updateOrder(newOrders, orderLineId, isFraudulent){
-        let order = Object.assign({}, newOrders.filter(order => order.orderLineId === orderLineId));
-        order.state = isFraudulent;
-        return order;
-    }
-
-    // Needs to fix
-    handlePredict(order){
-        console.log(order)
-        console.log(this.state.newOrders);
-        this.setState({isPredicting: true});
-        let predictedOrder = Object.assign({}, this.state.newOrders.filter((newOrder)=>newOrder.orderLineId === order.orderLineId));
-        
-        console.log(predictedOrder);
-
-        setTimeout(function(){
-            const isFraudulent = false;
-            predictedOrder.state = isFraudulent;
-            this.setState({newOrders: [
-                ...this.state.newOrders]
-            });
-            console.log(this.state.newOrders);
-        })
-    }
+    
     
     handleSearch(accountId) {
         this.setState({isSearching: true});
@@ -67,26 +46,77 @@ class FraudApp extends React.Component{
             this.setState({orders: orders});
             this.setState({newOrders: orders});
             this.setState({isSearching: false});
-
+            iziToast.success({
+                title: 'Success',
+                message: 'Searched successfully',
+                position: 'topRight',
+                timeout: 3000
+            })
           }.bind(this), 1000);
+    }
+
+    handlePredict(order){
+        if (!this.state.predictedOrders.includes(order.orderId)) {
+            this.setState({isPredicting: true});
+            let predictedOrder = Object.assign({}, order);
+            
+            setTimeout(function(){
+                const predictedResults = [ {orderLineId: 10000,
+                                        state: false}, 
+                                        {orderLineId: 10001,
+                                            state: true}];
+                
+                predictedOrder.orderLines.map(ol => ol.isFraudulent = predictedResults.filter(
+                    result=>result.orderLineId===ol.orderLineId)[0].state);
         
+                this.setState({newOrders: [Object.assign({}, predictedOrder), ...this.state.newOrders.filter(
+                    (newOrder) => newOrder.orderId !== order.orderId
+                    )]});
+                this.setState({predictedOrders: [...this.state.predictedOrders, order.orderId]})
+                this.setState({isPredicting: false});
+                iziToast.success({
+                    title: 'Success',
+                    message: 'Predicted successfully',
+                    position:'topRight',
+                    timeout: 3000
+                })
+            }.bind(this), 5000);
+        } else {
+            // send a notification
+            iziToast.warning({
+                title: 'Caution',
+                message: 'You\'ve predicted the order already.',
+                position: 'topRight',
+                timeout: 3000
+            });
+        }
+    }
+
+    handleCancel(order) {
+        this.setState({isPredicting: false});
+        iziToast.success({
+            title: 'Caution',
+            message: 'You\'ve cancel the prediction.',
+            position: 'topRight',
+            timeout: 3000
+        });
     }
 
     render() {
         return (
-            <div>
-            <Dimmer.Dimmable as={Segment} dimmed={this.state.isSearching}>
-            <Overview 
-                accounts={this.state.accounts} 
-                orders={this.state.orders}
-                newOrders={this.state.newOrders}
-                isSearching={this.state.isSearching}
-                isPredicting={this.state.isPredicting}
-                onSubmit={this.handleSearch.bind(this)} 
-                handlePredict={this.handlePredict.bind(this)}
-                numberOrderPerPage={this.state.numberOrderPerPage}/>
-            </Dimmer.Dimmable>
-            </div>
+            <Dimmer.Dimmable as={Segment}>
+                <B2bDetection 
+                    accounts={this.state.accounts} 
+                    orders={this.state.orders}
+                    newOrders={this.state.newOrders}
+                    isSearching={this.state.isSearching}
+                    isPredicting={this.state.isPredicting}
+                    onSubmit={this.handleSearch.bind(this)} 
+                    handlePredict={this.handlePredict.bind(this)}
+                    numberOrderPerPage={this.state.numberOrderPerPage}
+                    predictResults={this.state.predictedResults}
+                    handleCancel={this.handleCancel.bind(this)}/>
+            </Dimmer.Dimmable>   
         )
     }
 }

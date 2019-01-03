@@ -9,7 +9,7 @@ class OrderRow extends React.Component {
         super()
 
         this.state = {
-            showOrderLines: false
+            showOrderLines: true
         }
     }
 
@@ -17,11 +17,33 @@ class OrderRow extends React.Component {
         this.setState({showOrderLines: !this.state.showOrderLines})
     }
 
+    handlePredictClick(order) {
+        this.props.handlePredict(order);
+    }
+
+    handleCancelClick(order) {
+        this.props.handleCancel(order);
+    }
+
     render() {
         return (
             <List.Item>
                 <List.Content floated='right'>
-                    {this.props.handlePredict? (this.props.isPredicting ? <Button loading>Predicting</Button> : <Button onClick={(e, order) => {this.props.handlePredict(order.orderId)}}>Predict</Button>) : null}
+                    {this.props.handlePredict? 
+                        this.props.isPredicting ? 
+                            <div> 
+                                <Button positive loading>Predict</Button>
+                                <Button negative onClick={this.handleCancelClick.bind(this, this.props.order)}>
+                                    Cancel 
+                                </Button>
+                            </div> 
+                            : 
+                            <Button positive onClick={this.handlePredictClick.bind(this, this.props.order)}>
+                                Predict
+                            </Button> 
+                            : 
+                            null
+                    }
                 </List.Content>
                 <List.Content>
                     <Container textAlign="left">
@@ -33,7 +55,8 @@ class OrderRow extends React.Component {
                 </List.Content>
                     {this.state.showOrderLines ? <OrderLineTable 
                     orderLines={this.props.order.orderLines}
-                    handlePredict={this.props.handlePredict}/> : null}
+                    handlePredict={this.props.handlePredict}
+                    isPredicting={this.props.isPredicting}/> : null}
             </List.Item>
         );
     }
@@ -43,7 +66,8 @@ class OrderRow extends React.Component {
 OrderRow.propTypes = {
     order: PropTypes.shape(OrderShape),
     isPredicting: PropTypes.bool,
-    handlePredict: PropTypes.func
+    handlePredict: PropTypes.func,
+    handleCancel: PropTypes.func
 }
 
 export default OrderRow;

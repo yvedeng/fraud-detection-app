@@ -17,9 +17,8 @@ export default class OrderLineTable extends React.Component {
     }
 
     render () {
-
         return (
-            <Table>
+            <Table selectable>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>OrderLine ID</Table.HeaderCell>
@@ -35,7 +34,7 @@ export default class OrderLineTable extends React.Component {
                         <Table.HeaderCell>Product ID</Table.HeaderCell>
                         <Table.HeaderCell>Is Credited</Table.HeaderCell>
                         <Table.HeaderCell>Timestamp</Table.HeaderCell>
-                        <Table.HeaderCell>Is Fraudulent</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
 
@@ -51,12 +50,12 @@ export default class OrderLineTable extends React.Component {
                     }
                 </Table.Body>
             </Table>
-
         );
     }
 }
 
 OrderLineTable.propTypes = {
     orderLines: PropTypes.arrayOf(PropTypes.shape(OrderLineShape)),
-    handlePredict: PropTypes.func
+    handlePredict: PropTypes.func,
+    isPredicting: PropTypes.bool
 };

@@ -4,7 +4,7 @@ import OrderList from './OrderList';
 import AccountForm from './AccountForm';
 import Visualization from './Visualization';
 
-const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSubmit, handlePredict, numberOrderPerPage}) => (
+const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, onSubmit, handlePredict, numberOrderPerPage, handleCancel}) => (
     <div>
         <Header as='h1' textAlign="center" block={true} dividing={true} icon>
             <Icon name="user secret" circular={true} />
@@ -16,7 +16,7 @@ const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSub
 
         <React.Fragment>
             <Divider horizontal>
-                <Header as='h4' className="b2bAccountView">
+                <Header as='h3' className="b2bAccountView">
                     <Icon name='user' />
                     Select a user to participate the detection
                 </Header>
@@ -28,7 +28,7 @@ const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSub
             <br></br>
 
             <Divider horizontal>
-            <Header as='h4' className="historyView">
+            <Header as='h3' className="historyView">
                 <Icon name='history' />
                 Order history (detected)
             </Header>
@@ -40,7 +40,7 @@ const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSub
             <br></br>
 
             <Divider horizontal>
-            <Header as='h4' className="newOrderView">
+            <Header as='h3' className="newOrderView">
                 <Icon name='list ul' />
                 Orders that are ready to detect (undetected)
             </Header>
@@ -50,11 +50,12 @@ const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSub
                 orders={newOrders}
                 isPredicting={isPredicting}
                 handlePredict={handlePredict}
+                handleCancel={handleCancel}
                 numberOrderPerPage={numberOrderPerPage} />
             <br></br>
 
             <Divider horizontal>
-            <Header as='h4' className="visualizationView">
+            <Header as='h3' className="visualizationView">
                 <Icon name='area graph' />
                     Visualization
             </Header>
@@ -67,4 +68,4 @@ const Overview = ({accounts, orders, newOrders, isSearching, isPredicting, onSub
     </div>
 );
 
-export default Overview;
+export default B2BDetection;
