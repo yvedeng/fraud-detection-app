@@ -31,20 +31,20 @@ class FraudApp extends React.Component{
             ]
         })
     }
-
-    
     
     handleSearch(accountId) {
         this.setState({isSearching: true});
         console.log(accountId);
         if (accountId === 0){
             this.setState({orders: []});
-            this.setState({newOrders: []})
+            this.setState({newOrders: []});
+            this.setState({predictedOrders: []});
         }
         setTimeout(function (){
             // Something you want delayed.
             this.setState({orders: orders});
             this.setState({newOrders: orders});
+            this.setState({predictedOrders: []});
             this.setState({isSearching: false});
             iziToast.success({
                 title: 'Success',
