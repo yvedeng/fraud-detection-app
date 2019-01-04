@@ -56,7 +56,7 @@ class FraudApp extends React.Component{
     }
 
     handlePredict(order){
-        if (!this.state.predictedOrders.includes(order.orderId)) {
+        if (! this.state.predictedOrders.includes(order.orderId)) {
             this.setState({isPredicting: true});
             let predictedOrder = Object.assign({}, order);
             
@@ -68,10 +68,10 @@ class FraudApp extends React.Component{
                 
                 predictedOrder.orderLines.map(ol => ol.isFraudulent = predictedResults.filter(
                     result=>result.orderLineId===ol.orderLineId)[0].state);
-        
-                this.setState({newOrders: [Object.assign({}, predictedOrder), ...this.state.newOrders.filter(
-                    (newOrder) => newOrder.orderId !== order.orderId
-                    )]});
+                
+                const idx = this.state.newOrders.findIndex((no) => no.orderId === order.orderId)
+                
+                this.setState({newOrders: [...this.state.newOrders.slice(0, idx), predictedOrder, ...this.state.newOrders.slice(idx+1)]});
                 this.setState({predictedOrders: [...this.state.predictedOrders, order.orderId]})
                 this.setState({isPredicting: false});
                 iziToast.success({
@@ -94,9 +94,9 @@ class FraudApp extends React.Component{
 
     handleCancel(order) {
         this.setState({isPredicting: false});
-        iziToast.success({
+        iziToast.warning({
             title: 'Caution',
-            message: 'You\'ve cancel the prediction.',
+            message: 'You\'ve cancelled the prediction.',
             position: 'topRight',
             timeout: 3000
         });

@@ -18,7 +18,7 @@ const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, o
             <Divider horizontal>
                 <Header as='h3' className="b2bAccountView">
                     <Icon name='user' />
-                    Select a user to participate the detection
+                    SELECT A B2B ACCOUNT
                 </Header>
             </Divider>
             <AccountForm 
@@ -30,7 +30,7 @@ const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, o
             <Divider horizontal>
             <Header as='h3' className="historyView">
                 <Icon name='history' />
-                Order history (detected)
+                ORDER HISTORY (detected)
             </Header>
             </Divider>
 
@@ -42,7 +42,7 @@ const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, o
             <Divider horizontal>
             <Header as='h3' className="newOrderView">
                 <Icon name='list ul' />
-                Orders that are ready to detect (undetected)
+                NEW ORDERS (undetected)
             </Header>
             </Divider>
 

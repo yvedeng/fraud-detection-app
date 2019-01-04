@@ -25,7 +25,7 @@ class AccountForm extends React.Component{
             <Form 
                 onSubmit={this.handleSubmit.bind(this)}
             >
-                <Form.Group >
+                <Form.Group inline>
                 <Form.Input
                     label='B2B Account ID:' 
                     control='select'
@@ -37,6 +37,8 @@ class AccountForm extends React.Component{
                     )}
                 </Form.Input>
                 <Form.Button 
+                    compact={true}
+                    positive
                     content={this.props.isSearching? 'Searching':'Search'}
                     loading={this.props.isSearching}>
                 </Form.Button>

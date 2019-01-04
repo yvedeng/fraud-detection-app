@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, List, Icon, Container } from 'semantic-ui-react';
+import { Button, List, Icon } from 'semantic-ui-react';
 import OrderLineTable from './OrderLineTable';
 import {OrderShape} from './PropTypes';
 
@@ -32,7 +32,7 @@ class OrderRow extends React.Component {
                     {this.props.handlePredict? 
                         this.props.isPredicting ? 
                             <div> 
-                                <Button positive loading>Predict</Button>
+                                <Button positive loading >Predict</Button>
                                 <Button negative onClick={this.handleCancelClick.bind(this, this.props.order)}>
                                     Cancel 
                                 </Button>
@@ -45,13 +45,11 @@ class OrderRow extends React.Component {
                             null
                     }
                 </List.Content>
-                <List.Content>
-                    <Container textAlign="left">
-                    <List.Header onClick={this.handleExpandClick.bind(this)}>
+                <List.Content floated='left' verticalAlign='middle'>
+                    <List.Header onClick={this.handleExpandClick.bind(this)} >
                         {this.state.showOrderLines? <Icon name='angle down'/> : <Icon name='angle right'/>}
                         Order ID: {this.props.order.orderId}
                     </List.Header>
-                    </Container>
                 </List.Content>
                     {this.state.showOrderLines ? <OrderLineTable 
                     orderLines={this.props.order.orderLines}
