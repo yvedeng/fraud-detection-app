@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.0.14",
     "d3": "^5.7.0",
     "izitoast": "^1.4.0",
     "react": "^16.7.0",
