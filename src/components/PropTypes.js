@@ -1,33 +1,46 @@
 import PropTypes from 'prop-types';
 
 const OrderLineShape = {
-    orderLineId: PropTypes.number,
-    customerId: PropTypes.number,
+    orderLineID: PropTypes.number,
+    orderID: PropTypes.number,
+    accountID: PropTypes.number,
+    customerContactID: PropTypes.number,
     paymentType: PropTypes.number,
     origin: PropTypes.number,
-    shopId:  PropTypes.number,
-    countryId: PropTypes.number,
-    deliveryMethodId: PropTypes.number,
-    productRelationId: PropTypes.number,
+    shopID:  PropTypes.number,
+    countryID: PropTypes.number,
+    deliveryMethodID: PropTypes.number,
+    productRelationID: PropTypes.number,
     cardValue: PropTypes.number,
     quantity: PropTypes.number,
-    productId: PropTypes.number,
-    isCredited: PropTypes.bool,
+    productID: PropTypes.number,
+    isCredited: PropTypes.number,
     hour: PropTypes.number,
     minute: PropTypes.number,
     second: PropTypes.number,
     day: PropTypes.number,
     month: PropTypes.number,
     year: PropTypes.number,
-    isFraudulent: PropTypes.bool
+    state: PropTypes.number
 }
 
 const OrderShape = {
-    orderId: PropTypes.number,
+    orderID: PropTypes.number,
+    hasPredicted: PropTypes.bool,
     orderLines: PropTypes.arrayOf(PropTypes.shape(OrderLineShape))
+}
+
+const AccountShape = {
+    name: PropTypes.string,
+    accountID: PropTypes.number,
+    accountType: PropTypes.string,
+    defaultPaymentMethod: PropTypes.string,
+    shopID: PropTypes.number,
+    IsWhiteListed: PropTypes.number
 }
 
 export {
     OrderShape,
-    OrderLineShape
+    OrderLineShape,
+    AccountShape
 };

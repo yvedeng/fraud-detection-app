@@ -1,16 +1,16 @@
 import React from 'react';
 import { Segment, Dimmer} from 'semantic-ui-react';
 import iziToast from 'izitoast';
-import B2bDetection from './components/B2bDetection';
-import { orders, initialOrders} from './api/fakeData';
+import B2bDetection from './components/B2bDetectionOverview';
+import B2bDetectApi from './api/B2bDetectApi';
 
 class FraudApp extends React.Component{
     constructor() {
         super()
         this.state = {
             accounts: [],
-            orders: initialOrders,
-            newOrders: initialOrders,
+            oldOrders: [],
+            newOrders: [],
             isSearching: false,
             isPredicting: false,
             numberOrderPerPage: 1,
@@ -18,19 +18,11 @@ class FraudApp extends React.Component{
         }
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.getAccounts();
     }
 
-    getAccounts(){
-        this.setState({
-            accounts: [
-                {key:100, text:"100th company", value:100},
-                {key:101, text:"101st company", value:101},
-                {key:102, text:"102nd company", value:102}
-            ]
-        })
-    }
+  
     
     handleSearch(accountId) {
         this.setState({isSearching: true});
@@ -40,19 +32,46 @@ class FraudApp extends React.Component{
             this.setState({newOrders: []});
             this.setState({predictedOrders: []});
         }
-        setTimeout(function (){
-            // Something you want delayed.
-            this.setState({orders: orders});
-            this.setState({newOrders: orders});
-            this.setState({predictedOrders: []});
-            this.setState({isSearching: false});
+        // setTimeout(function (){
+        //     // Something you want delayed.
+        //     this.setState({orders: orders});
+        //     this.setState({newOrders: orders});
+        //     this.setState({predictedOrders: []});
+        //     this.setState({isSearching: false});
+        //     iziToast.success({
+        //         title: 'Success',
+        //         message: 'Searched successfully',
+        //         position: 'topRight',
+        //         timeout: 3000
+        //     })
+        //   }
+        // .bind(this), 1000)
+
+        B2bDetectApi.getOrderHistory({'account_id': accountId.toString()})
+        .then((response) => {
+            console.log('Success:', response)
+            this.setState({isSearching: false})
+            console.log(response)
+            this.setState({orders: response["old"]})
+            this.setState({newOrders: response["new"]})
             iziToast.success({
                 title: 'Success',
                 message: 'Searched successfully',
-                position: 'topRight',
+                position:'topRight',
                 timeout: 3000
             })
-          }.bind(this), 1000);
+        })
+        .catch((error) => 
+            {
+                console.error('Error:', error)
+                this.setState({isSearching: false})
+                iziToast.error({
+                    title: 'Error',
+                    message: {error},
+                    position: 'topRight',
+                    timeout: 3000
+                });
+            })
     }
 
     handlePredict(order){
@@ -107,7 +126,7 @@ class FraudApp extends React.Component{
             <Dimmer.Dimmable as={Segment}>
                 <B2bDetection 
                     accounts={this.state.accounts} 
-                    orders={this.state.orders}
+                    orders={this.state.oldOrders}
                     newOrders={this.state.newOrders}
                     isSearching={this.state.isSearching}
                     isPredicting={this.state.isPredicting}
@@ -121,4 +140,5 @@ class FraudApp extends React.Component{
     }
 }
 
-export default FraudApp;
+
+

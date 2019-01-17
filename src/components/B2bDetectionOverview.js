@@ -2,9 +2,9 @@ import React from 'react';
 import { Divider, Header, Icon } from 'semantic-ui-react';
 import OrderList from './OrderList';
 import AccountForm from './AccountForm';
-import Visualization from './Visualization';
+import Visualization from './visualization/Visualization';
 
-const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, onSubmit, handlePredict, numberOrderPerPage, handleCancel}) => (
+const B2BDetectionOverview = ({accounts, oldOrders, newOrders, isSearching, isPredicting, onSearchHistory, handlePredict, numberOrderPerPage, predictedOrder, importances}) => (
     <div>
         <Header as='h1' textAlign="center" block={true} dividing={true} icon>
             <Icon name="user secret" circular={true} />
@@ -24,7 +24,7 @@ const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, o
             <AccountForm 
                 allAccounts={accounts}
                 isSearching={isSearching}
-                onClick={onSubmit}/>
+                onClick={onSearchHistory}/>
             <br></br>
 
             <Divider horizontal>
@@ -32,10 +32,11 @@ const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, o
                 <Icon name='history' />
                 ORDER HISTORY (detected)
             </Header>
+            Total: {oldOrders.length} Orders
             </Divider>
 
             <OrderList 
-                orders={orders}
+                orders={oldOrders}
                 numberOrderPerPage={numberOrderPerPage} />
             <br></br>
 
@@ -44,28 +45,35 @@ const B2BDetection = ({accounts, orders, newOrders, isSearching, isPredicting, o
                 <Icon name='list ul' />
                 NEW ORDERS (undetected)
             </Header>
+            Total: {newOrders.length} Orders
             </Divider>
 
             <OrderList 
                 orders={newOrders}
                 isPredicting={isPredicting}
                 handlePredict={handlePredict}
-                handleCancel={handleCancel}
-                numberOrderPerPage={numberOrderPerPage} />
+                numberOrderPerPage={numberOrderPerPage}
+                predictedOrder={predictedOrder} />
             <br></br>
 
-            <Divider horizontal>
-            <Header as='h3' className="visualizationView">
-                <Icon name='area graph' />
-                    Visualization
-            </Header>
-            </Divider>
-            <div className="visual">
-                <Visualization />
-            </div>
+            {importances.length > 0?
+                <div>
+                    <Divider horizontal>
+                    <Header as='h3' className="visualizationView">
+                        <Icon name='area graph' />
+                            Visualization
+                    </Header>
+                    </Divider>
+                    <div className="visual">
+                    <Visualization importances={importances}/>
+                    </div>
+                </div>
+                : null
+            }
+            
 
         </React.Fragment>
     </div>
 );
 
-export default B2BDetection;
+export default B2BDetectionOverview;

@@ -7,6 +7,7 @@ import { OrderLineShape } from './PropTypes';
 export default class OrderLineTable extends React.Component {
     constructor(){
         super();
+
         this.handlePredictClick = this.handlePredictClick.bind(this);
     }
 
@@ -22,6 +23,7 @@ export default class OrderLineTable extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>OrderLine ID</Table.HeaderCell>
+                        <Table.HeaderCell>Account ID</Table.HeaderCell>
                         <Table.HeaderCell>Customer ID</Table.HeaderCell>
                         <Table.HeaderCell>Payment Type</Table.HeaderCell>
                         <Table.HeaderCell>Origin</Table.HeaderCell>
@@ -41,11 +43,11 @@ export default class OrderLineTable extends React.Component {
                 <Table.Body>
                     {
                         this.props.orderLines.map((orderLine, i) => {
-                            console.log(orderLine);
                             return (<OrderLineTRow 
                                     key={i} 
                                     orderLine={orderLine} 
-                                    handlePredict={this.handlePredictClick}/>);
+                                    handlePredict={this.handlePredictClick}
+                                    predictedOrder={this.props.predictedOrder}/>);
                         })
                     }
                 </Table.Body>
@@ -57,5 +59,6 @@ export default class OrderLineTable extends React.Component {
 OrderLineTable.propTypes = {
     orderLines: PropTypes.arrayOf(PropTypes.shape(OrderLineShape)),
     handlePredict: PropTypes.func,
-    isPredicting: PropTypes.bool
+    isPredicting: PropTypes.bool,
+    predictedOrder: PropTypes.array
 };

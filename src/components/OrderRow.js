@@ -6,23 +6,22 @@ import {OrderShape} from './PropTypes';
 
 class OrderRow extends React.Component {
     constructor() {
-        super()
+        super();
 
         this.state = {
-            showOrderLines: true
-        }
+            showOrderLines: false,
+        };
     }
 
     handleExpandClick(e) {
         this.setState({showOrderLines: !this.state.showOrderLines})
     }
 
-    handlePredictClick(order) {
-        this.props.handlePredict(order);
-    }
-
-    handleCancelClick(order) {
-        this.props.handleCancel(order);
+    handlePredictClick(params) {
+        // const orderId = params.orderId;
+        // const accountId = params.accountId;
+        // this.props.handlePredict(orderId, accountId);
+        this.props.handlePredict(params)
     }
 
     render() {
@@ -30,15 +29,11 @@ class OrderRow extends React.Component {
             <List.Item>
                 <List.Content floated='right'>
                     {this.props.handlePredict? 
-                        this.props.isPredicting ? 
-                            <div> 
-                                <Button positive loading >Predict</Button>
-                                <Button negative onClick={this.handleCancelClick.bind(this, this.props.order)}>
-                                    Cancel 
-                                </Button>
-                            </div> 
-                            : 
-                            <Button positive onClick={this.handlePredictClick.bind(this, this.props.order)}>
+                            <Button 
+                                positive 
+                                disabled={this.props.isPredicting}
+                                loading={this.props.isPredicting}
+                                onClick={this.handlePredictClick.bind(this, this.props.order.orderLines)}>
                                 Predict
                             </Button> 
                             : 
@@ -48,24 +43,25 @@ class OrderRow extends React.Component {
                 <List.Content floated='left' verticalAlign='middle'>
                     <List.Header onClick={this.handleExpandClick.bind(this)} >
                         {this.state.showOrderLines? <Icon name='angle down'/> : <Icon name='angle right'/>}
-                        Order ID: {this.props.order.orderId}
+                        Order ID: {this.props.order.orderID}
                     </List.Header>
                 </List.Content>
                     {this.state.showOrderLines ? <OrderLineTable 
                     orderLines={this.props.order.orderLines}
                     handlePredict={this.props.handlePredict}
-                    isPredicting={this.props.isPredicting}/> : null}
+                    isPredicting={this.props.isPredicting}
+                    predictedOrder={this.props.predictedOrder}/> : null}
             </List.Item>
         );
     }
 }
 
-    
 OrderRow.propTypes = {
     order: PropTypes.shape(OrderShape),
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
-    handleCancel: PropTypes.func
+    handleCancel: PropTypes.func,
+    predictedOrder: PropTypes.array
 }
 
 export default OrderRow;

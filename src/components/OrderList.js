@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Accordion, List, Pagination, Icon, Container } from 'semantic-ui-react'
 import OrderRow from './OrderRow';
 import { OrderShape } from './PropTypes';
+import { predictOrder } from '../actions/orderHistoryActions';
 
 export default class OrderList extends React.Component {
 
@@ -15,18 +16,21 @@ export default class OrderList extends React.Component {
         }
     }
 
-    componentWillReceiveProps(){
+    componentDidUpdate(prevProps){
         // when received a new orders - rerender!
-        const lengthOfOrders = this.props.orders.length;
-        const nPages = Math.ceil(lengthOfOrders/this.props.numberOrderPerPage);
-        const orderSlices = [];
-        for (let i = 0; i<nPages; i++) {
-            orderSlices.push([...this.props.orders.slice(i, i+this.props.numberOrderPerPage)])
+        if (this.props.orders !== prevProps.orders) {
+            const lengthOfOrders = this.props.orders.length;
+            const nPages = Math.ceil(lengthOfOrders/this.props.numberOrderPerPage);
+            let orderSlices = [];
+            for (let i = 0; i<nPages; i++) {
+                orderSlices.push([...this.props.orders.slice(i, i+this.props.numberOrderPerPage)])
+            }
+            this.setState({
+                numberOfPage: nPages,
+                ordersByPage: orderSlices
+            })
         }
-        console.log(orderSlices);
-        this.setState({
-            numberOfPage: nPages,
-            ordersByPage: orderSlices})
+        
     }
 
     handlePageChange(e, pageProps) {
@@ -34,6 +38,7 @@ export default class OrderList extends React.Component {
     }
 
     render() {
+
         return (
             <div>
                 <Accordion fluid styled>
@@ -42,26 +47,24 @@ export default class OrderList extends React.Component {
                     this.state.ordersByPage[this.state.activePage-1].map((order, i)=>{
                         return (
                             <List key={i} divided verticalAlign='middle'>
-                            <List.Content floated='right'>
-                                Total: {this.props.orders.length} Orders
-                            </List.Content>
                             <OrderRow 
                                 key={i}
                                 order={order}
                                 isPredicting={this.props.isPredicting}
                                 handlePredict={this.props.handlePredict}
-                                handleCancel={this.props.handleCancel}></OrderRow>
+                                predictOrder={this.props.predictOrder}></OrderRow>
                             </List>)})
                     : // if single page
                     this.props.orders.map((order, i)=>{
                         return (
                             <List key={i} divided verticalAlign='middle'>
+
                             <OrderRow 
                                 key={i}
                                 order={order}
                                 isPredicting={this.props.isPredicting}
                                 handlePredict={this.props.handlePredict}
-                                handleCancel={this.props.handleCancel}></OrderRow>
+                                predictOrder={this.props.predictOrder}></OrderRow>
                             </List>)})
                     }
                  
@@ -88,5 +91,5 @@ OrderList.propTypes = {
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
     numberOrderPerPage: PropTypes.number.isRequired,
-    handleCancel: PropTypes.func
+    predictOrder: PropTypes.array
 };
