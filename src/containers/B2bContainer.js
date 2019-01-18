@@ -12,6 +12,7 @@ class B2bContainer extends React.Component {
 
         this.onClickSearch = this.onClickSearch.bind(this);
         this.handlePredict = this.handlePredict.bind(this);
+        this.handleAccountChange = this.handleAccountChange.bind(this);
 
     }
 
@@ -29,11 +30,10 @@ class B2bContainer extends React.Component {
         
     }
 
-    // handlePredict(orderId, accountId) {
-    //     console.log(orderId)
-    //     console.log(accountId)
-    //     this.props.predictOrder(orderId, accountId);
-    // }
+    handleAccountChange(account){
+        this.props.b2bActions.handleAccountSelectChange(account);
+    }
+
     handlePredict(order) {
         console.log(order)
         this.setState({isPredicting: true})
@@ -48,12 +48,14 @@ class B2bContainer extends React.Component {
         return (
                <B2bDetectionOverview
                     accounts={this.props.orderReducer.accounts}
+                    account={this.props.orderReducer.account}
                     oldOrders={this.props.orderReducer.oldOrders}
                     newOrders={this.props.orderReducer.newOrders}
                     isSearching={this.props.orderReducer.isSearching}
                     isPredicting={this.props.orderReducer.isPredicting}
                     onSearchHistory={this.onClickSearch}
                     handlePredict={this.handlePredict}
+                    handleAccountChange={this.handleAccountChange}
                     numberOrderPerPage={this.props.numberOrderPerPage}
                     importances={this.props.orderReducer.importances}
                 >

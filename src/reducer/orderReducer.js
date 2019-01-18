@@ -93,13 +93,22 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                     }))
                 }
             }
-
+        
+        case types.ACCOUNT_CHANGE:
+            return Object.assign({}, state, {
+                account: action.account
+            })
             
         case types.GET_ORDER_HISTORY_ERROR:
             return Object.assign({}, state, {
                 isPredicting: false,
                 error: action.error
             });
+
+        case types.SHOW_ALL_ORDERLINES:
+            return Object.assign({}, state, {
+                showAllOrderLines: !action.isShow
+            })
 
         case types.GET_ORDER_STATUS:
             console.log(action.isSearching)

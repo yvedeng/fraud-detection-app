@@ -25,6 +25,10 @@ export function loadB2BAccountList() {
     };
 }
 
+export function handleAccountSelectChange(account) {
+    return {type: types.ACCOUNT_CHANGE,
+            account: account}
+}
 
 // GET HISTORY BY ACCOUNT ID
 function getOrderHistorySuccess(newJson, oldJson) {
@@ -36,6 +40,11 @@ function getOrderHistorySuccess(newJson, oldJson) {
 function getOrderHistoryError(error) {
     return {type: types.GET_ORDER_HISTORY_ERROR,
             error: error};
+}
+
+export function showAllOrderLines(isShow) {
+    return {type: types.SHOW_ALL_ORDERLINES,
+            isShow: isShow}
 }
 
 function getOrderStatus(status) {

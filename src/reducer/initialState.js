@@ -2,8 +2,10 @@ const initialState = {
 
     b2bOrder: {
         accounts: [],
+        account: {},
         isPredicting: false,
         isSearching: false,
+        showAllOrderLines: false,
         oldOrders: [],
         newOrders: [],
         predictedOrder: [],

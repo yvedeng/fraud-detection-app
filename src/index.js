@@ -6,14 +6,16 @@ import * as serviceWorker from './serviceWorker';
 import 'semantic-ui-css/semantic.min.css'
 import "izitoast/dist/css/iziToast.css";
 import configureStore from './store/configureStore';
-import { loadB2BAccountList, getOrderHistory, predictOrder } from './actions/orderHistoryActions';
+import * as b2bActions from './actions/orderHistoryActions';
 import { beginAjaxCall } from './actions/ajaxStatusActions';
 
 const store = configureStore();
 
-store.dispatch(loadB2BAccountList());
-store.dispatch(accountId => getOrderHistory(accountId));
-store.dispatch((orderId, accountId) => predictOrder(orderId, accountId));
+store.dispatch(b2bActions.loadB2BAccountList());
+store.dispatch(account => b2bActions.handleAccountSelectChange(account));
+store.dispatch(isShow => b2bActions.showAllOrderLines(isShow));
+store.dispatch(accountId => b2bActions.getOrderHistory(accountId));
+store.dispatch((orderId, accountId) => b2bActions.predictOrder(orderId, accountId));
 store.dispatch(beginAjaxCall())
 
 ReactDOM.render(

@@ -32,11 +32,12 @@ const OrderShape = {
 
 const AccountShape = {
     name: PropTypes.string,
-    accountID: PropTypes.number,
+    accountID: PropTypes.string,
     accountType: PropTypes.string,
     defaultPaymentMethod: PropTypes.string,
-    shopID: PropTypes.number,
-    IsWhiteListed: PropTypes.number
+    shopID: PropTypes.string,
+    IsWhiteListed: PropTypes.string,
+    accountCreated: PropTypes.string
 }
 
 export {
