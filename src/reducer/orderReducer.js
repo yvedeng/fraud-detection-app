@@ -20,14 +20,12 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
     switch (action.type) {
 
         case types.LOAD_ACCOUNT_SUCCESS:
-        return (Object.assign({}, state, {
-            accounts: action.accounts,
-        }));
+        return {...initialState.b2bOrder,
+            accounts: action.accounts
+        };
 
         case types.LOAD_ACCOUNT_ERROR:
-            return (Object.assign({}, state, {
-                error: action.error,
-            }));
+            return initialState.b2bOrder;
 
 
         case types.GET_ORDER_HISTORY_SUCCESS:
@@ -95,9 +93,11 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
             }
         
         case types.ACCOUNT_CHANGE:
-            return Object.assign({}, state, {
+            return {
+                ...initialState.b2bOrder,
+                accounts: state.accounts,
                 account: action.account
-            })
+            }
             
         case types.GET_ORDER_HISTORY_ERROR:
             return Object.assign({}, state, {
@@ -105,9 +105,16 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                 error: action.error
             });
 
-        case types.SHOW_ALL_ORDERLINES:
+        case types.SHOW_OLD_ORDERLINES:
+            console.log("updating showOldOrderLines");
+            console.log(state.showOldOrderLines)
             return Object.assign({}, state, {
-                showAllOrderLines: !action.isShow
+                showOldOrderLines: !state.showOldOrderLines
+            })
+        
+        case types.SHOW_NEW_ORDERLINES:
+            return Object.assign({}, state, {
+                showNewOrderLines: !state.showNewOrderLines
             })
 
         case types.GET_ORDER_STATUS:

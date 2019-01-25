@@ -9,8 +9,14 @@ class OrderRow extends React.Component {
         super();
 
         this.state = {
-            showOrderLines: false,
+            showOrderLines: false
         };
+    }
+
+    componentDidUpdate(nextProps){
+        if (nextProps.showAllOrderLines !== this.props.showAllOrderLines) {
+            this.setState({showOrderLines: this.props.showAllOrderLines})
+        }
     }
 
     handleExpandClick(e) {
@@ -42,7 +48,7 @@ class OrderRow extends React.Component {
                 </List.Content>
                 <List.Content floated='left' verticalAlign='middle'>
                     <List.Header onClick={this.handleExpandClick.bind(this)} >
-                        {this.state.showOrderLines? <Icon name='angle down'/> : <Icon name='angle right'/>}
+                        {this.state.showOrderLines ? <Icon name='angle down'/> : <Icon name='angle right'/>}
                         Order ID: {this.props.order.orderID}
                     </List.Header>
                 </List.Content>
@@ -61,7 +67,8 @@ OrderRow.propTypes = {
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
     handleCancel: PropTypes.func,
-    predictedOrder: PropTypes.array
+    predictedOrder: PropTypes.array,
+    showAllOrderLines: PropTypes.bool
 }
 
 export default OrderRow;

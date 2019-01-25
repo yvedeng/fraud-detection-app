@@ -1,3 +1,5 @@
+import { localQuery } from '../helpers/ApiQuery'; 
+
 function dispatchCall(url, opts) {
     return fetch(url, opts)
         .then((response) => {
@@ -17,7 +19,7 @@ function dispatchCall(url, opts) {
 export default class Api {
     static post(url='', data=null){
         console.log(JSON.stringify(data))
-        return dispatchCall(url, {
+        return dispatchCall(localQuery+url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +30,7 @@ export default class Api {
     }
 
     static put(url='', data=null){
-        return dispatchCall(url, {
+        return dispatchCall(localQuery+url, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +41,7 @@ export default class Api {
     }
 
     static get(url=''){
-        return dispatchCall(url, {
+        return dispatchCall(localQuery+url, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

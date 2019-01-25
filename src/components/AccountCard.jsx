@@ -5,9 +5,9 @@ import { Card, Icon, Button } from 'semantic-ui-react';
 
 export default class AccountCard extends React.Component {
 
-    componentDidUpdate(prevProps){
-        if (this.props.account !== prevProps.account) {
-            return true;
+    handleSubmit(){
+        if(this.props.account){
+            this.props.onClick(this.props.account.accountID)
         }
     }
 
@@ -55,5 +55,7 @@ export default class AccountCard extends React.Component {
 }
 
 AccountCard.propTypes = {
-    account: PropTypes.shape(AccountShape)
+    account: PropTypes.shape(AccountShape),
+    onClick: PropTypes.func.isRequired,
+    isSearching: PropTypes.bool.isRequired
 };

@@ -4,6 +4,7 @@ import { Divider, Header, Icon } from 'semantic-ui-react';
 import * as types from './PropTypes';
 import OrderList from './OrderList';
 import AccountForm from './AccountForm';
+import SlideBar from './SlideBar';
 import Visualization from './visualization/Visualization';
 
 class B2BDetectionOverview extends React.Component {
@@ -27,10 +28,15 @@ class B2BDetectionOverview extends React.Component {
                     </Divider>
                     <AccountForm 
                         allAccounts={this.props.accounts}
+                        account={this.props.account}
                         isSearching={this.props.isSearching}
                         onClick={this.props.onSearchHistory}
                         handleAccountChange={this.props.handleAccountChange}/>
                     <br></br>
+
+                    <div>
+                       
+                    </div>
 
                     <Divider horizontal>
                     <Header as='h3' className="historyView">
@@ -39,10 +45,16 @@ class B2BDetectionOverview extends React.Component {
                     </Header>
                     Total: {this.props.oldOrders.length} Orders
                     </Divider>
-
+                    
+                    <div>
+                        <SlideBar
+                            showAllOrderLines={this.props.showOldOrderLines}
+                            handleShow={this.props.handleShowOld}/>
+                    </div>
                     <OrderList 
                         orders={this.props.oldOrders}
-                        numberOrderPerPage={this.props.numberOrderPerPage} />
+                        numberOrderPerPage={this.props.numberOrderPerPage}
+                        showAllOrderLines={this.props.showOldOrderLines} />
                     <br></br>
 
                     <Divider horizontal>
@@ -53,12 +65,20 @@ class B2BDetectionOverview extends React.Component {
                     Total: {this.props.newOrders.length} Orders
                     </Divider>
 
+                    <div>
+                        
+                        <SlideBar
+                            showAllOrderLines={this.props.showNewOrderLines}
+                            handleShow={this.props.handleShowNew}
+                        />
+                    </div>
                     <OrderList 
                         orders={this.props.newOrders}
                         isPredicting={this.props.isPredicting}
                         handlePredict={this.props.handlePredict}
                         numberOrderPerPage={this.props.numberOrderPerPage}
-                        predictedOrder={this.props.predictedOrder} />
+                        predictedOrder={this.props.predictedOrder}
+                        showAllOrderLines={this.props.showNewOrderLines} />
                     <br></br>
 
                     {this.props.importances.length > 0?
@@ -70,7 +90,10 @@ class B2BDetectionOverview extends React.Component {
                             </Header>
                             </Divider>
                             <div className="visual">
-                            <Visualization importances={this.props.importances}/>
+                            <Visualization 
+                                importances={this.props.importances}
+                                newOrders={this.props.newOrders}
+                                oldOlders={this.props.oldOlders}/>
                             </div>
                         </div>
                         : null
@@ -84,7 +107,7 @@ class B2BDetectionOverview extends React.Component {
     
 B2BDetectionOverview.propTypes = {
     accounts:PropTypes.arrayOf(PropTypes.shape(types.AccountShape)).isRequired,
-    account:PropTypes.shape(types.AccountShape).isRequired,
+    account:PropTypes.shape(types.AccountShape),
     oldOrders:PropTypes.arrayOf(PropTypes.shape(types.OrderShape)).isRequired,
     newOrders:PropTypes.arrayOf(PropTypes.shape(types.OrderShape)).isRequired,
     isSearching:PropTypes.bool.isRequired,
@@ -93,7 +116,11 @@ B2BDetectionOverview.propTypes = {
     handlePredict:PropTypes.func.isRequired,
     handleAccountChange:PropTypes.func.isRequired,
     numberOrderPerPage:PropTypes.number.isRequired,
-    importances:PropTypes.array.isRequired
-}
+    importances:PropTypes.array.isRequired,
+    showOldOrderLines: PropTypes.bool,
+    showNewOrderLines: PropTypes.bool,
+    handleShowOld: PropTypes.func.isRequired,
+    handleShowNew: PropTypes.func.isRequired
+};
 
 export default B2BDetectionOverview;

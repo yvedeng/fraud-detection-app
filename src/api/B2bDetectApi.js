@@ -3,7 +3,8 @@ import Api from './api';
 export default class B2bDetectApi {
 
     static getAllB2BAccounts() {
-        return Api.get('http://127.0.0.1:5000/search_b2b');
+
+        return Api.get('/api/search_b2b');
     }
 
     static getAllB2CAccounts() {
@@ -11,27 +12,31 @@ export default class B2bDetectApi {
     }
 
     static getOrderHistory(params) {
-        console.log(params)
-        return Api.post('http://127.0.0.1:5000/search_history', params);
+        
+        return Api.post('/api/search_history', params);
     }
 
     static predict(params) {
-        return Api.post('http://127.0.0.1:5000/predict', params);
+        return Api.post('/api/predict', params);
     }
 
     static update(params) {
-        return Api.put('http://127.0.0.1:5000/update', params);
+        return Api.put('/api/update', params);
     }
 
     static getTest(params) {
-        return Api.get('http://127.0.0.1:5000/get_test', params);
+        return Api.get('//apiget_test', params);
+    }
+
+    static getFeatureNames() {
+        return Api.get('/api/features')
     }
 
     static healthCheck() {
-        return Api.get('http://127.0.0.1:5000/health');
+        return Api.get('/api/health');
     }
 
     static checkAlive() {
-        return Api.get('http://127.0.0.1:5000/hello');
+        return Api.get('/api/hello');
     }
 }
