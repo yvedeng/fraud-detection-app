@@ -42,9 +42,12 @@ function getOrderHistoryError(error) {
             error: error};
 }
 
-export function showAllOrderLines(isShow) {
-    return {type: types.SHOW_ALL_ORDERLINES,
-            isShow: isShow}
+export function handleShowOldOrderLines() {
+    return {type: types.SHOW_OLD_ORDERLINES}
+}
+
+export function handleShowNewOrderLines() {
+    return {type: types.SHOW_NEW_ORDERLINES}
 }
 
 function getOrderStatus(status) {
@@ -107,39 +110,6 @@ function predictOrderStatus(status) {
             isPredicting: status}
 }
 
-
-
-// export function predictOrder(orderId, accountId) {
-//     return dispatch => {
-//         dispatch(predictOrderStatus(true))
-//         return B2bDetectApi.predict({'order_id': orderId, 'account_id': accountId})
-//             .then((response) => {
-//                 console.log(response)
-//                 const responseObject = JSON.stringify(response);
-//                 const stringAnswer = responseObject === 1? 'fraudulent':'regular';
-//                 iziToast.success({
-//                     title: 'Success',
-//                     message: 'I believe the order: ' + orderId + ' is a ' + stringAnswer + ' order.',
-//                     position:'topRight',
-//                     timeout: 3000
-//                 })
-//                 dispatch(predictOrderSuccess(responseObject));
-//                 dispatch(predictOrderStatus(false));
-//             })
-//             .catch(error => {
-//                 console.error(error)
-//                 iziToast.error({
-//                     title: 'Error',
-//                     message: error.toString(),
-//                     position: 'topRight',
-//                     timeout: 3000
-//                 });
-//                 dispatch(predictOrderError(error));
-//                 dispatch(predictOrderStatus(false));
-//             })
-//     }
-// };
-
 export function predictOrder(order) {
     return dispatch => {
         dispatch(predictOrderStatus(true))
@@ -149,13 +119,21 @@ export function predictOrder(order) {
                 const orderId = order.order[0].orderID;
                 response.orderId = orderId;
                 console.log(response)
-                const stringAnswer = response.predict === 1? 'fraudulent':'regular';
-                iziToast.success({
-                    title: 'Success',
-                    message: 'I believe the order: is a ' + stringAnswer + ' order.',
+                response.predict !== 1? 
+                iziToast.warning({
+                    title: 'Fraudulent',
+                    message: 'I believe the order: ' + orderId + ' is a fradulent order.',
                     position:'topRight',
                     timeout: 3000
                 })
+                :
+                iziToast.success({
+                    title: 'Regular',
+                    message: 'I believe the order: ' + orderId + ' is a regular order.',
+                    position:'topRight',
+                    timeout: 3000
+                });
+                
                 dispatch(predictOrderSuccess(response));
                 dispatch(predictOrderStatus(false));
             })

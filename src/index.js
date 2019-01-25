@@ -13,7 +13,8 @@ const store = configureStore();
 
 store.dispatch(b2bActions.loadB2BAccountList());
 store.dispatch(account => b2bActions.handleAccountSelectChange(account));
-store.dispatch(isShow => b2bActions.showAllOrderLines(isShow));
+store.dispatch(isShow => b2bActions.handleShowOldOrderLines(isShow));
+store.dispatch(isShow => b2bActions.handleShowNewOrderLines(isShow));
 store.dispatch(accountId => b2bActions.getOrderHistory(accountId));
 store.dispatch((orderId, accountId) => b2bActions.predictOrder(orderId, accountId));
 store.dispatch(beginAjaxCall())

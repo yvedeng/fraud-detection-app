@@ -1,11 +1,12 @@
 const initialState = {
-
+    
     b2bOrder: {
         accounts: [],
-        account: {},
+        account: null,
         isPredicting: false,
         isSearching: false,
-        showAllOrderLines: false,
+        showOldOrderLines: false,
+        showNewOrderLines: false,
         oldOrders: [],
         newOrders: [],
         predictedOrder: [],

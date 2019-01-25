@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Accordion, List, Pagination, Icon, Container } from 'semantic-ui-react'
 import OrderRow from './OrderRow';
 import { OrderShape } from './PropTypes';
-import { predictOrder } from '../actions/orderHistoryActions';
 
 export default class OrderList extends React.Component {
 
@@ -13,7 +12,7 @@ export default class OrderList extends React.Component {
             activePage: 1,
             numberOfPage: 1,
             ordersByPage: []
-        }
+        };
     }
 
     componentDidUpdate(prevProps){
@@ -50,6 +49,7 @@ export default class OrderList extends React.Component {
                             <OrderRow 
                                 key={i}
                                 order={order}
+                                showAllOrderLines={this.props.showAllOrderLines}
                                 isPredicting={this.props.isPredicting}
                                 handlePredict={this.props.handlePredict}
                                 predictOrder={this.props.predictOrder}></OrderRow>
@@ -62,6 +62,7 @@ export default class OrderList extends React.Component {
                             <OrderRow 
                                 key={i}
                                 order={order}
+                                showAllOrderLines={this.props.showAllOrderLines}
                                 isPredicting={this.props.isPredicting}
                                 handlePredict={this.props.handlePredict}
                                 predictOrder={this.props.predictOrder}></OrderRow>
@@ -91,5 +92,6 @@ OrderList.propTypes = {
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
     numberOrderPerPage: PropTypes.number.isRequired,
-    predictOrder: PropTypes.array
+    predictOrder: PropTypes.array,
+    showAllOrderLines: PropTypes.bool
 };

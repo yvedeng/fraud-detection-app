@@ -13,7 +13,17 @@ class B2bContainer extends React.Component {
         this.onClickSearch = this.onClickSearch.bind(this);
         this.handlePredict = this.handlePredict.bind(this);
         this.handleAccountChange = this.handleAccountChange.bind(this);
+        this.handleShowNew = this.handleShowNew.bind(this);
+        this.handleShowOld = this.handleShowOld.bind(this);
 
+    }
+
+    handleShowNew() {
+        this.props.b2bActions.handleShowNewOrderLines(this.props.showNewOrderLines);
+    }
+
+    handleShowOld() {
+        this.props.b2bActions.handleShowOldOrderLines(this.props.showOrderLines);
     }
 
     onClickSearch(accountId) {
@@ -29,13 +39,12 @@ class B2bContainer extends React.Component {
         }
         
     }
-
+    
     handleAccountChange(account){
         this.props.b2bActions.handleAccountSelectChange(account);
     }
 
     handlePredict(order) {
-        console.log(order)
         this.setState({isPredicting: true})
         this.props.b2bActions.predictOrder({'order':order});
     }
@@ -58,6 +67,10 @@ class B2bContainer extends React.Component {
                     handleAccountChange={this.handleAccountChange}
                     numberOrderPerPage={this.props.numberOrderPerPage}
                     importances={this.props.orderReducer.importances}
+                    handleShowNew={this.handleShowNew}
+                    handleShowOld={this.handleShowOld}
+                    showOldOrderLines={this.props.orderReducer.showOldOrderLines}
+                    showNewOrderLines={this.props.orderReducer.showNewOrderLines}
                 >
                </B2bDetectionOverview>
         );

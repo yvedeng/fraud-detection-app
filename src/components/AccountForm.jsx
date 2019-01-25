@@ -6,22 +6,15 @@ import AccountCard from './AccountCard';
 
 class AccountForm extends React.Component{  
 
-    handleSubmit(){
-        if(this.props.account){
-            this.props.onClick(this.props.account.accountID)
-        }
+    componentDidUpdate(prevProps) {
+        if (this.props.account !== prevProps.account) {
+            return true;
+        } 
     }
 
     handleChange(e){
         const account = this.props.allAccounts[e.target.value]
         this.props.handleAccountChange(account)
-    }
-
-    componentDidUpdate(prevProps){
-        if (this.props.account !== prevProps.account) {
-            this.fetchData(this.props.account);
-            this.render();
-        }
     }
 
     render() {
@@ -40,8 +33,10 @@ class AccountForm extends React.Component{
                 </Form.Input>
                 </Form.Group>
                 {this.props.account?
-                <AccountCard
-                    account={this.props.account} /> : null}
+                    <AccountCard
+                        account={this.props.account}
+                        onClick={this.props.onClick}
+                        isSearching={this.props.isSearching} /> : null}
             </Form>
         );
     } 
