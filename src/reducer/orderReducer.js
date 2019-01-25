@@ -20,40 +20,28 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
     switch (action.type) {
 
         case types.LOAD_ACCOUNT_SUCCESS:
-        return {...initialState.b2bOrder,
-            accounts: action.accounts
-        };
+            return {...initialState.b2bOrder,
+                accounts: action.accounts
+            };
 
         case types.LOAD_ACCOUNT_ERROR:
-            return initialState.b2bOrder;
+            return {...initialState.b2bOrder,
+                error: action.error};
 
 
         case types.GET_ORDER_HISTORY_SUCCESS:
             if (action.newOrders.length===0) {
-                if (action.oldOrders.length===0){
-                    return (Object.assign({}, state, {
-                        newOrders: [],
-                        oldOrders: [],
-                        isPredicting: false,
-                        predictResult: null,
-                        importances: []
-                    }))
-
+                if (action.oldOrders.length===0) {
+                    return state; 
                 } else {
                     const oldMap = _groupBy(action.oldOrders, oldOrder=>oldOrder.orderID)
-                    let oldArray = []
-                    oldMap.forEach((v, k) => {oldArray.push({orderID: k, hasPredicted: true, orderLines: v})})
+                    let oldArray = [];
+                    oldMap.forEach((v, k) => {oldArray.push({orderID: k, hasPredicted: true, orderLines: v})});
                     
-                    return (Object.assign({}, state, {
-                        newOrders: [],
-                        oldOrders: oldArray,
-                        isPredicting: false,
-                        predictResult: null,
-                        importances: []
-                    }))
-                    
+                    return {...state, oldOrders: oldArray};
                 }
-            } else {
+            }
+            else {
                 if (action.oldOrders.length===0){
                     const newMap = _groupBy(action.newOrders, newOrder=>newOrder.orderID)
                     let newArray = []
@@ -62,13 +50,7 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                         copyOrderLines.forEach(o=>o.state=null);
                         newArray.push({orderID: k, hasPredicted: false, orderLines: copyOrderLines})})
         
-                    return (Object.assign({}, state, {
-                        newOrders: newArray,
-                        oldOrders: [],
-                        isPredicting: false,
-                        predictResult: null,
-                        importances: []
-                    }))
+                    return {...state, newOrders: newArray};
 
                 } else {
                     const oldMap = _groupBy(action.oldOrders, oldOrder=>oldOrder.orderID)
@@ -82,13 +64,9 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                         copyOrderLines.forEach(o=>o.state=null);
                         newArray.push({orderID: k, hasPredicted: false, orderLines: v})})
                     
-                    return (Object.assign({}, state, {
+                    return {...state,
                         newOrders: newArray,
-                        oldOrders: oldArray,
-                        isPredicting: false,
-                        predictResult: null,
-                        importances: []
-                    }))
+                        oldOrders: oldArray };
                 }
             }
         
@@ -97,54 +75,53 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                 ...initialState.b2bOrder,
                 accounts: state.accounts,
                 account: action.account
-            }
+            };
             
         case types.GET_ORDER_HISTORY_ERROR:
-            return Object.assign({}, state, {
+            return {...state, 
                 isPredicting: false,
                 error: action.error
-            });
+            };
 
         case types.SHOW_OLD_ORDERLINES:
-            console.log("updating showOldOrderLines");
-            console.log(state.showOldOrderLines)
-            return Object.assign({}, state, {
+            return {...state,
                 showOldOrderLines: !state.showOldOrderLines
-            })
+            };
         
         case types.SHOW_NEW_ORDERLINES:
-            return Object.assign({}, state, {
+            return {...state, 
                 showNewOrderLines: !state.showNewOrderLines
-            })
+            };
 
         case types.GET_ORDER_STATUS:
-            console.log(action.isSearching)
-            return (Object.assign({}, state, {
+            return {...state, 
                 isSearching: action.isSearching
-            }))
+            };
         
         case types.PREDICT_ORDER_SUCCESS:
             state.newOrders.map(obj => obj.orderID === action.orderId ? obj.orderLines.forEach(o=>
                 {o.state=action.result
                 return o
                 }) : obj);
-            return Object.assign({}, state, {
+            return {...state, 
                 newOrders: [...state.newOrders],
                 predictResult: action.result,
                 importances: action.importances,
                 predictedOrder: [...state.predictedOrder, Object.assign({}, {'orderId': action.result})]
-            });
+            };
             
         case types.PREDICT_ORDER_ERROR:
-            return Object.assign({}, state, {
+            return {...state, 
+                predictResult: null,
+                importances: [],
                 error: action.error
-            });
+            };
 
         case types.PREDICT_ORDER_STATUS:
-            console.log(action.isPredicting)
-            return Object.assign({}, state,{
+            return {...state,
                 isPredicting: action.isPredicting
-            });
+            };
+            
       default:
         return state
     }
