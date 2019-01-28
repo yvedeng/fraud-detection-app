@@ -6,6 +6,7 @@ import OrderList from './OrderList';
 import AccountForm from './AccountForm';
 import SlideBar from './SlideBar';
 import Visualization from './visualization/Visualization';
+import LineChart from './visualization/LineChart';
 
 class B2BDetectionOverview extends React.Component {
     render() {
@@ -34,10 +35,6 @@ class B2BDetectionOverview extends React.Component {
                         handleAccountChange={this.props.handleAccountChange}/>
                     <br></br>
 
-                    <div>
-                       
-                    </div>
-
                     <Divider horizontal>
                     <Header as='h3' className="historyView">
                         <Icon name='history' />
@@ -57,6 +54,22 @@ class B2BDetectionOverview extends React.Component {
                         showAllOrderLines={this.props.showOldOrderLines} />
                     <br></br>
 
+                    {this.props.oldOrders.length!==0?
+                    <div>
+                        <Divider horizontal>
+                        <Header as='h3' className="feature-comparision">
+                            <Icon name='area graph' />
+                                Timelines For Old Orders
+                        </Header>
+                        </Divider>
+                        <LineChart 
+                            data={this.props.oldOrders}
+                            divId={"old-order-timeline"}
+                        />
+                    </div>
+                     : null
+                    }
+
                     <Divider horizontal>
                     <Header as='h3' className="newOrderView">
                         <Icon name='list ul' />
@@ -66,7 +79,6 @@ class B2BDetectionOverview extends React.Component {
                     </Divider>
 
                     <div>
-                        
                         <SlideBar
                             showAllOrderLines={this.props.showNewOrderLines}
                             handleShow={this.props.handleShowNew}
@@ -80,25 +92,31 @@ class B2BDetectionOverview extends React.Component {
                         predictedOrder={this.props.predictedOrder}
                         showAllOrderLines={this.props.showNewOrderLines} />
                     <br></br>
-
-                    {this.props.importances.length > 0?
-                        <div>
-                            <Divider horizontal>
-                            <Header as='h3' className="visualizationView">
-                                <Icon name='area graph' />
-                                    Visualization
-                            </Header>
-                            </Divider>
-                            <div className="visual">
-                            <Visualization 
-                                importances={this.props.importances}
-                                newOrders={this.props.newOrders}
-                                oldOlders={this.props.oldOlders}/>
-                            </div>
-                        </div>
-                        : null
-                    }
                     
+                    {this.props.newOrders.length!==0?
+                    <div>
+                        <Divider horizontal>
+                        <Header as='h3' className="feature-comparision">
+                            <Icon name='area graph' />
+                                Timelines For New Orders
+                        </Header>
+                        </Divider>
+                    
+                        <LineChart 
+                            data={this.props.newOrders}
+                            divId={"new-order-timeline"}
+                        /> 
+                    </div>: null
+                    }
+                     
+                    <div className="visual">
+                        <Visualization 
+                            importances={this.props.importances}
+                            oldOrders={this.props.oldOrders}
+                            newOrders={this.props.newOrders}
+                        />
+                    </div>
+
                 </React.Fragment>
             </div>
         );

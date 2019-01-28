@@ -1,87 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Select } from 'semantic-ui-react';
+import { Divider, Header, Icon, Grid } from 'semantic-ui-react';
 import PieChart from './PieChart';
+import FeatureStatistic from './FeatureStatistic';
+
+import { OrderShape } from '../PropTypes';
 import XYChart from './XYChart';
-import LineChart from './LineChart';
 
 class Visualization extends React.Component {
-
-    constructor() {
-        super();
-
-        this.state = {
-            selectedFeature: null
-        };
-    }
-    shouldComponentUpdate(nextProps) {
-        if (this.props.importances !== nextProps.importances) {
-            console.log(this.props.importances)
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    handleFeatureSelectChange(e) {
-        this.setState({
-            selectedFeature: e.target.value
-        });
-    }
-
-    _getFeatureList(importances) {
-        const features =  importances.map(importance => {
-            return importance.feature
-        });
-        const options = features.map((f, i) => {
-            return {key: i, value: f, text: f}
-        })
-        console.log(options);
-        return options;
-    }
-
-    _getCompareList(orders, feature) {
-        if(feature){
-            const FeatureList = orders.map((order, i)=>{
-                return {key: i, value: order[feature]};
-            })
-    
-            return FeatureList;
-        } else {
-            return null
-        }
-       
-    }
-
-    _getSellReport(oldOrders, newOrders) {
-
-    }
 
     render() {
         return (
             <div>
-                <Grid.Column>
-                    <h3> The Importance of Feature</h3>
-                    <PieChart importances={this.props.importances}/> 
-                </Grid.Column>
-                <b></b>
-                <Grid.Column>
-                    <Select 
-                        placeholder='Select a feature' 
-                        options={this._getFeatureList(this.props.importances)}
-                        onChange={this.handleFeatureSelectChange.bind(this)} />
-                    <h3>Comparision between features</h3>
-                    {this.state.selectedFeature?
-                    <XYChart 
-                        feature={this.state.selectedFeature}
-                        newOrders={this._getCompareList(this.props.newOrders, this.state.selectedFeature)}
-                        oldOrders={this._getCompareList(this.props.oldOrders, this.state.selectedFeature)}/>
-                    : null}
-                </Grid.Column>
-                <Grid.Column>
+                {this.props.importances.length > 0?
+                <div>
+                    <Divider horizontal>
+                    <Header as='h3' className="importance-visual">
+                        <Icon name='area graph' />
+                            The Importance of Feature
+                    </Header>
+                    </Divider>
+                    <Grid.Column>
+                        <PieChart 
+                            data={this.props.importances}
+                            value={"importance"}
+                            category={"feature"}
+                            divId={"importance-div"}/> 
+                    </Grid.Column>
+                    
+                    <Divider horizontal>
+                    <Header as='h3' className="feature-comparision">
+                        <Icon name='area graph' />
+                            Feature Comparision
+                    </Header>
+                    </Divider>
+                    <FeatureStatistic 
+                        importances={this.props.importances}
+                        newOrders={this.props.newOrders}
+                        oldOrders={this.props.oldOrders}
+                    />
+                </div>
+                : null
+                }
+
+                
+                {/* <Grid.Column>
                     <LineChart
                         sellReport={this._getSellReport(this.props.oldOrders, this.props.newOrders)}/>
-                </Grid.Column>
+                </Grid.Column> */}
             </div>
             
         )
@@ -90,8 +56,8 @@ class Visualization extends React.Component {
 
 Visualization.prototypes={
     importances: PropTypes.array.isRequired,
-    newOrders: PropTypes.array,
-    oldOrders: PropTypes.array
+    newOrders:  PropTypes.arrayOf(PropTypes.shape(OrderShape)).isRequired,
+    oldOrders:  PropTypes.arrayOf(PropTypes.shape(OrderShape)).isRequired
 };
 
 export default Visualization;

@@ -122,7 +122,7 @@ export function predictOrder(order) {
                 response.predict !== 1? 
                 iziToast.warning({
                     title: 'Fraudulent',
-                    message: 'I believe the order: ' + orderId + ' is a fradulent order.',
+                    message: 'I believe the order: ' + orderId + ' is a fraudlent order.',
                     position:'topRight',
                     timeout: 3000
                 })

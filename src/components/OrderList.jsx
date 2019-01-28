@@ -22,7 +22,7 @@ export default class OrderList extends React.Component {
             const nPages = Math.ceil(lengthOfOrders/this.props.numberOrderPerPage);
             let orderSlices = [];
             for (let i = 0; i<nPages; i++) {
-                orderSlices.push([...this.props.orders.slice(i, i+this.props.numberOrderPerPage)])
+                orderSlices.push([...this.props.orders.slice(i*this.props.numberOrderPerPage, (i+1)*this.props.numberOrderPerPage)])
             }
             this.setState({
                 numberOfPage: nPages,
