@@ -11,7 +11,7 @@ class LineChart extends React.Component {
 
         let chart = am4core.create(this.props.divId, am4charts.XYChart);
 
-        chart.colors.step = 2;
+        chart.colors.step = 5;
 
         const visualData = [];
 
@@ -28,7 +28,7 @@ class LineChart extends React.Component {
                 totalValue = parseInt(ol.cardValue) * parseInt(ol.quantity);
             }
             if (isNaN(totalValue)) {
-                console.log(this.props.data[i])
+                console.error(this.props.data[i])
             }
             // since orderlines in the same order has the same timestamp, get the first orderline is enough
             var timestamp = new Date(ol.year, ol.month-1, ol.day, ol.hour, ol.minute, ol.second);

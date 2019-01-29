@@ -122,6 +122,22 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                 isPredicting: action.isPredicting
             };
             
+        case types.UPDATE_SINGLE_ORDER_SUCCESS:
+            // find the order from newOrders and push it to oldOrders
+            const updatingOrder = state.newOrders.find(order => order.orderID = action.orderId);
+            return {...state,
+                newOrders: {...state.newOrders.filter(order=> order.orderID === action.orderId)},
+                oldOrders: {...state.oldOrders.push(updatingOrder)}
+            };
+        
+        case types.UPDATE_SINGLE_ORDER_ERROR:
+            return {...state, error: action.error};
+            
+        case types.UPDATE_SINGLE_ORDER_STATUS:
+            return {...state,
+                isSingleUpdating: action.isSingleUpdating
+            };
+
       default:
         return state
     }

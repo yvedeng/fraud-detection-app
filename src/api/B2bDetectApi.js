@@ -32,6 +32,10 @@ export default class B2bDetectApi {
         return Api.get('/api/features')
     }
 
+    static updateSingleOrder(params) {
+        return Api.post('/api/update_single', params)
+    }
+
     static healthCheck() {
         return Api.get('/api/health');
     }

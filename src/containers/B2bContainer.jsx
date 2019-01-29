@@ -15,7 +15,12 @@ class B2bContainer extends React.Component {
         this.handleAccountChange = this.handleAccountChange.bind(this);
         this.handleShowNew = this.handleShowNew.bind(this);
         this.handleShowOld = this.handleShowOld.bind(this);
+        this.handleUpdateSingle = this.handleUpdateSingle.bind(this);
 
+    }
+
+    componentWillMount(){
+        this.props.b2bActions.loadB2BAccountList();
     }
 
     handleShowNew() {
@@ -46,11 +51,11 @@ class B2bContainer extends React.Component {
 
     handlePredict(order) {
         this.setState({isPredicting: true})
-        this.props.b2bActions.predictOrder({'order':order});
+        this.props.b2bActions.predictOrder(order);
     }
 
-    componentWillMount(){
-        this.props.b2bActions.loadB2BAccountList();
+    handleUpdateSingle(order){
+        this.props.b2bActions.updateSingleOrder(order);
     }
 
     render() {
@@ -64,6 +69,7 @@ class B2bContainer extends React.Component {
                     isPredicting={this.props.orderReducer.isPredicting}
                     onSearchHistory={this.onClickSearch}
                     handlePredict={this.handlePredict}
+                    handleUpdateSingle={this.handleUpdateSingle}
                     handleAccountChange={this.handleAccountChange}
                     numberOrderPerPage={this.props.numberOrderPerPage}
                     importances={this.props.orderReducer.importances}

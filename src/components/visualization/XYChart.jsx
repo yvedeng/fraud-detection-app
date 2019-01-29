@@ -8,6 +8,7 @@ class XYChart extends React.Component {
     componentDidMount() {
         let chart = am4core.create('barchart', am4charts.XYChart);
 
+        
         // Add data
         chart.data = [{
             "year": "2016",
@@ -71,7 +72,7 @@ class XYChart extends React.Component {
             return series;
         }
         
-        createSeries("europe", "Europe");
+        createSeries("new", "Europe");
         createSeries("namerica", "North America");
         createSeries("asia", "Asia-Pacific");
         createSeries("lamerica", "Latin America");
@@ -91,8 +92,8 @@ class XYChart extends React.Component {
 
 XYChart.proptypes = {
     feature: PropTypes.string,
-    newOrders: PropTypes.arrayOf(PropTypes.shape(OrderShape)),
-    oldOrders: PropTypes.arrayOf(PropTypes.shape(OrderShape))
+    newData: PropTypes.array,
+    oldData: PropTypes.array
 };
 
 export default XYChart;

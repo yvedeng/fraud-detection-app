@@ -115,8 +115,7 @@ export function predictOrder(order) {
         dispatch(predictOrderStatus(true))
         return B2bDetectApi.predict({'order':order})
             .then((response) => {
-                console.log(order)
-                const orderId = order.order[0].orderID;
+                const orderId = order[0].orderID;
                 response.orderId = orderId;
                 console.log(response)
                 response.predict !== 1? 
@@ -149,3 +148,33 @@ export function predictOrder(order) {
             })
     }
 };
+
+function updateSingleOrderSuccess(response) {
+    return {
+        type: types.UPDATE_SINGLE_ORDER_SUCCESS,
+        orderId: response.orderId
+    }
+}
+
+function updateSingleOrderError(error) {
+    return {type: types.UPDATE_SINGLE_ORDER_ERROR,
+            error: error};
+}
+
+export function updateSingleOrder(order) {
+    return dispatch => {
+        return B2bDetectApi.updateSingleOrder({'order': order})
+            .then((response) => {
+                console.log(response);
+                dispatch(updateSingleOrderSuccess(response));
+            }).catch(error => {
+                iziToast.error({
+                    title: 'Error',
+                    message: error.toString(),
+                    position: 'topRight',
+                    timeout: 3000
+                });
+                dispatch(updateSingleOrderError(error));
+            })
+    }
+}

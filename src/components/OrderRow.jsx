@@ -20,14 +20,18 @@ class OrderRow extends React.Component {
     }
 
     handleExpandClick(e) {
-        this.setState({showOrderLines: !this.state.showOrderLines})
+        this.setState({showOrderLines: !this.state.showOrderLines});
     }
 
     handlePredictClick(params) {
         // const orderId = params.orderId;
         // const accountId = params.accountId;
         // this.props.handlePredict(orderId, accountId);
-        this.props.handlePredict(params)
+        this.props.handlePredict(params);
+    }
+
+    handleUpdateSingleClick(params) {
+        this.props.handleUpdateSingle(params);
     }
 
     render() {
@@ -35,6 +39,16 @@ class OrderRow extends React.Component {
             <List.Item>
                 <List.Content floated='right'>
                     {this.props.handlePredict? 
+                        <div>
+                            {this.props.order.orderLines[0].state?
+                                <Button
+                                    negative
+                                    loading={this.props.isUpdating}
+                                    onClick={this.handleUpdateSingleClick.bind(this, this.props.order)}
+                                    data-tooltip={"Is the prediction correct?"} 
+                                    data-position={"top left"}>
+                                    Update
+                                </Button>: null}
                             <Button 
                                 positive 
                                 disabled={this.props.isPredicting}
@@ -42,6 +56,7 @@ class OrderRow extends React.Component {
                                 onClick={this.handlePredictClick.bind(this, this.props.order.orderLines)}>
                                 Predict
                             </Button> 
+                            </div>
                             : 
                             null
                     }
@@ -66,6 +81,7 @@ OrderRow.propTypes = {
     order: PropTypes.shape(OrderShape),
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
+    handleUpdateSingle: PropTypes.func,
     handleCancel: PropTypes.func,
     predictedOrder: PropTypes.array,
     showAllOrderLines: PropTypes.bool
