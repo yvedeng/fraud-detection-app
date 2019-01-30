@@ -16,6 +16,7 @@ class B2bContainer extends React.Component {
         this.handleShowNew = this.handleShowNew.bind(this);
         this.handleShowOld = this.handleShowOld.bind(this);
         this.handleUpdateSingle = this.handleUpdateSingle.bind(this);
+        this.handleUpdateOneOrder = this.handleUpdateOneOrder.bind(this);
 
     }
 
@@ -42,11 +43,44 @@ class B2bContainer extends React.Component {
                 timeout: 3000
             });
         }
-        
     }
     
     handleAccountChange(account){
         this.props.b2bActions.handleAccountSelectChange(account);
+    }
+
+    handleUpdateOneOrder(order) {
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Warmly warning',
+            message: 'You cannot see the undetected orders before this order, are you sure?',
+            position: 'center',
+            buttons: [
+                ['<button><b>YES</b></button>', function (instance, toast) {
+        
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+        
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+        
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+        
+                }],
+            ],
+            onClosing: function(instance, toast, closedBy){
+                console.info('Closing | closedBy: ' + closedBy);
+            },
+            onClosed: function(instance, toast, closedBy){
+                console.info('Closed | closedBy: ' + closedBy);
+            }
+        });
+
+        this.handleUpdateOneOrder(order);
     }
 
     handlePredict(order) {
@@ -67,9 +101,10 @@ class B2bContainer extends React.Component {
                     newOrders={this.props.orderReducer.newOrders}
                     isSearching={this.props.orderReducer.isSearching}
                     isPredicting={this.props.orderReducer.isPredicting}
+                    isSingleOrderUpdating={this.props.orderReducer.isSingleOrderUpdating}
                     onSearchHistory={this.onClickSearch}
                     handlePredict={this.handlePredict}
-                    handleUpdateSingle={this.handleUpdateSingle}
+                    handleUpdateSingle={this.handleUpdateOneOrder}
                     handleAccountChange={this.handleAccountChange}
                     numberOrderPerPage={this.props.numberOrderPerPage}
                     importances={this.props.orderReducer.importances}

@@ -15,6 +15,14 @@ function _groupBy(list, keyGetter) {
     return map;
 }
 
+function _pushIfNotExist(arr, element) {
+    if (!(element in arr)) {
+        arr.push(element);
+    }
+    arr = arr.sort((a, b)=>(a.orderID > b.orderID)? 1: -1);
+    return arr;
+}
+
 export default function orderReducer (state=initialState.b2bOrder, action) {
  
     switch (action.type) {
@@ -37,7 +45,10 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                     const oldMap = _groupBy(action.oldOrders, oldOrder=>oldOrder.orderID)
                     let oldArray = [];
                     oldMap.forEach((v, k) => {oldArray.push({orderID: k, hasPredicted: true, orderLines: v})});
-                    
+                
+                    oldArray = oldArray.sort((a, b)=> 
+                        (a.orderID > b.orderID)? 1: -1
+                    )
                     return {...state, oldOrders: oldArray};
                 }
             }
@@ -49,14 +60,18 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                         let copyOrderLines = [...v];
                         copyOrderLines.forEach(o=>o.state=null);
                         newArray.push({orderID: k, hasPredicted: false, orderLines: copyOrderLines})})
-        
+                    newArray = newArray.sort((a, b)=> 
+                        (a.orderID > b.orderID)? 1: -1
+                    )
                     return {...state, newOrders: newArray};
 
                 } else {
                     const oldMap = _groupBy(action.oldOrders, oldOrder=>oldOrder.orderID)
                     let oldArray = []
                     oldMap.forEach((v, k) => {oldArray.push({orderID: k, hasPredicted: true, orderLines: v})})
-
+                    oldArray = oldArray.sort((a, b)=> 
+                        (a.orderID > b.orderID)? 1: -1
+                    )
                     const newMap = _groupBy(action.newOrders, newOrder=>newOrder.orderID)
                     let newArray = []
                     newMap.forEach((v, k) => {
@@ -64,6 +79,9 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
                         copyOrderLines.forEach(o=>o.state=null);
                         newArray.push({orderID: k, hasPredicted: false, orderLines: v})})
                     
+                    newArray = newArray.sort((a, b)=> 
+                        (a.orderID > b.orderID)? 1: -1
+                    )
                     return {...state,
                         newOrders: newArray,
                         oldOrders: oldArray };
@@ -99,15 +117,23 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
             };
         
         case types.PREDICT_ORDER_SUCCESS:
-            state.newOrders.map(obj => obj.orderID === action.orderId ? obj.orderLines.forEach(o=>
-                {o.state=action.result
-                return o
-                }) : obj);
+            let orderIndex = state.newOrders.findIndex(order => order.orderID === action.orderId);
+            const predictingOrder = state.newOrders[orderIndex];
+            const predictOL = predictingOrder.orderLines.map(ol => {
+                ol.state = action.result;
+                return ol;
+            })
+            const predictedOrder = {
+                ...state.newOrders[orderIndex], 
+                hasPredicted: true, 
+                orderLines: predictOL};
+           
             return {...state, 
-                newOrders: [...state.newOrders],
+                newOrders: [...state.newOrders.slice(0, orderIndex),
+                    predictedOrder,
+                    ...state.newOrders.slice(orderIndex+1)],
                 predictResult: action.result,
-                importances: action.importances,
-                predictedOrder: [...state.predictedOrder, Object.assign({}, {'orderId': action.result})]
+                importances: action.importances
             };
             
         case types.PREDICT_ORDER_ERROR:
@@ -124,18 +150,21 @@ export default function orderReducer (state=initialState.b2bOrder, action) {
             
         case types.UPDATE_SINGLE_ORDER_SUCCESS:
             // find the order from newOrders and push it to oldOrders
-            const updatingOrder = state.newOrders.find(order => order.orderID = action.orderId);
+            const updatingOrder = state.newOrders.find(order => order.orderID === action.orderId);
+            const updatedNewOrders = state.newOrders.filter(order=> order.orderID !== action.orderId);
+            const updatedOldOrders = _pushIfNotExist(state.oldOrders, updatingOrder);
+
             return {...state,
-                newOrders: {...state.newOrders.filter(order=> order.orderID === action.orderId)},
-                oldOrders: {...state.oldOrders.push(updatingOrder)}
+                newOrders: [...updatedNewOrders],
+                oldOrders: [...updatedOldOrders]
             };
         
         case types.UPDATE_SINGLE_ORDER_ERROR:
             return {...state, error: action.error};
-            
+
         case types.UPDATE_SINGLE_ORDER_STATUS:
             return {...state,
-                isSingleUpdating: action.isSingleUpdating
+                isSingleOrderUpdating: action.isSingleOrderUpdating
             };
 
       default:

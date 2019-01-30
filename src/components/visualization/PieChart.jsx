@@ -11,7 +11,7 @@ class PieChart extends React.Component {
         this.setUpChart();
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps) {
         if (this.props.data !== prevProps.data) {
             console.log(this.props.data);
             this.setUpChart();

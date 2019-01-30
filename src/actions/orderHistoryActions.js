@@ -71,7 +71,7 @@ export function getOrderHistory(accountId) {
 
                 iziToast.success({
                     title: 'Success',
-                    message: 'Searched ' + accountId + '\'s history successfully',
+                    message: 'Searched ' + accountId + '\'s history successfully.',
                     position:'topRight',
                     timeout: 3000
                 })
@@ -161,12 +161,26 @@ function updateSingleOrderError(error) {
             error: error};
 }
 
+function updateSingleOrderStatus(status) {
+    return {type: types.UPDATE_SINGLE_ORDER_STATUS,
+            isSingleOrderUpdating: status}
+}
+
 export function updateSingleOrder(order) {
     return dispatch => {
+        dispatch(updateSingleOrderStatus(true))
+        debugger;
         return B2bDetectApi.updateSingleOrder({'order': order})
             .then((response) => {
                 console.log(response);
                 dispatch(updateSingleOrderSuccess(response));
+                dispatch(updateSingleOrderStatus(false));
+                iziToast.success({
+                    title: 'Regular',
+                    message: 'The order ' + response.orderId + ' has been pushed to old history.',
+                    position:'topRight',
+                    timeout: 3000
+                });
             }).catch(error => {
                 iziToast.error({
                     title: 'Error',
@@ -175,6 +189,7 @@ export function updateSingleOrder(order) {
                     timeout: 3000
                 });
                 dispatch(updateSingleOrderError(error));
+                dispatch(updateSingleOrderStatus(false));
             })
     }
 }

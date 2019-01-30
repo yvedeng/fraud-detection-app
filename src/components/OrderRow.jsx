@@ -43,7 +43,8 @@ class OrderRow extends React.Component {
                             {this.props.order.orderLines[0].state?
                                 <Button
                                     negative
-                                    loading={this.props.isUpdating}
+                                    disabled={this.props.isSingleOrderUpdating}
+                                    loading={this.props.isSingleOrderUpdating}
                                     onClick={this.handleUpdateSingleClick.bind(this, this.props.order)}
                                     data-tooltip={"Is the prediction correct?"} 
                                     data-position={"top left"}>
@@ -81,6 +82,7 @@ OrderRow.propTypes = {
     order: PropTypes.shape(OrderShape),
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
+    isSingleOrderUpdating: PropTypes.bool,
     handleUpdateSingle: PropTypes.func,
     handleCancel: PropTypes.func,
     predictedOrder: PropTypes.array,

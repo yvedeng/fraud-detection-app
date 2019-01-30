@@ -90,6 +90,7 @@ class B2BDetectionOverview extends React.Component {
                         handlePredict={this.props.handlePredict}
                         numberOrderPerPage={this.props.numberOrderPerPage}
                         predictedOrder={this.props.predictedOrder}
+                        isSingleOrderUpdating={this.props.isSingleOrderUpdating}
                         handleUpdateSingle={this.props.handleUpdateSingle}
                         showAllOrderLines={this.props.showNewOrderLines} />
                     <br></br>
@@ -131,6 +132,7 @@ B2BDetectionOverview.propTypes = {
     newOrders:PropTypes.arrayOf(PropTypes.shape(types.OrderShape)).isRequired,
     isSearching:PropTypes.bool.isRequired,
     isPredicting:PropTypes.bool.isRequired,
+    isSingleOrderUpdating: PropTypes.bool.isRequired,
     onSearchHistory:PropTypes.func.isRequired,
     handlePredict:PropTypes.func.isRequired,
     handleUpdateSingle: PropTypes.func.isRequired,

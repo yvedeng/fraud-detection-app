@@ -6,7 +6,22 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 class LineChart extends React.Component {
     componentDidMount() {
+        this.setUpChart();
+    }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.date != prevProps.data) {
+            this.setUpChart();
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.chart) {
+          this.chart.dispose();
+        }
+      }
+  
+    setUpChart() {
         am4core.useTheme(am4themes_animated);
 
         let chart = am4core.create(this.props.divId, am4charts.XYChart);
@@ -119,12 +134,6 @@ class LineChart extends React.Component {
         chart.scrollbarX = new am4core.Scrollbar();
     }
 
-    componentWillUnmount() {
-        if (this.chart) {
-          this.chart.dispose();
-        }
-      }
-  
     render(){
         return (
             <div id={this.props.divId} style={{ width: "100%", height: "500px" }}></div>

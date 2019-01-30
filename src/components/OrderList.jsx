@@ -52,6 +52,7 @@ export default class OrderList extends React.Component {
                                 showAllOrderLines={this.props.showAllOrderLines}
                                 isPredicting={this.props.isPredicting}
                                 handlePredict={this.props.handlePredict}
+                                isSingleOrderUpdating= {this.props.isSingleOrderUpdating}
                                 handleUpdateSingle={this.props.handleUpdateSingle}
                                 predictOrder={this.props.predictOrder}></OrderRow>
                             </List>)})
@@ -66,6 +67,7 @@ export default class OrderList extends React.Component {
                                 showAllOrderLines={this.props.showAllOrderLines}
                                 isPredicting={this.props.isPredicting}
                                 handlePredict={this.props.handlePredict}
+                                isSingleOrderUpdating= {this.props.isSingleOrderUpdating}
                                 handleUpdateSingle={this.props.handleUpdateSingle}
                                 predictOrder={this.props.predictOrder}></OrderRow>
                             </List>)})
@@ -93,6 +95,7 @@ OrderList.propTypes = {
     orders: PropTypes.arrayOf(PropTypes.shape(OrderShape)),
     isPredicting: PropTypes.bool,
     handlePredict: PropTypes.func,
+    isSingleOrderUpdating: PropTypes.bool,
     handleUpdateSingle: PropTypes.func,
     numberOrderPerPage: PropTypes.number.isRequired,
     predictOrder: PropTypes.array,

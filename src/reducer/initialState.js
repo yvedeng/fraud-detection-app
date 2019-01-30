@@ -5,11 +5,11 @@ const initialState = {
         account: null,
         isPredicting: false,
         isSearching: false,
+        isSingleOrderUpdating: false,
         showOldOrderLines: false,
         showNewOrderLines: false,
         oldOrders: [],
         newOrders: [],
-        predictedOrder: [],
         error: null,
         predictResult: null,
         importances: []
